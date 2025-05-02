@@ -141,13 +141,13 @@
             const isEligible = attendancePercentage >= 75;
             const eligibilityMessage = isEligible 
                 ? "<span style='color: #a5ffa5;'>✅ Eligible for semester exam!</span>" 
-                : "<span style='color: #ffa5a5;'>❌ Not eligible for semester exam (min 75% required).</span>";
+                : "<span style='color: #ff0000;'>❌ Not eligible for semester exam (min 75% required).</span>";
             
             // Calculate days needed to reach 75%
             let daysNeededMessage = "";
             if (attendancePercentage < 75) {
                 const daysNeeded = Math.ceil((0.75 * totalDays) - daysPresent);
-                daysNeededMessage = `<br><strong>Hours needed to reach 75%:</strong> ${daysNeeded} more Hour(S)`;
+                daysNeededMessage = `<br><strong>Hours needed to reach 75%:</strong> ${daysNeeded} more Hour(s)`;
             }
             
             document.getElementById('result').innerHTML = `
