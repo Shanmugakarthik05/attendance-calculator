@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #2247c1, #bc9de1);
+            background-size: cover;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            color: #fff;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .calculator {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .input-group label {
+            color: #fff;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            font-size: 1rem;
+            color: #fff;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        button {
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            font-size: 1.1rem;
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📅 Attendance Calculator</h1>
+        
+        <div class="calculator">
+            <div class="input-group">
+                <label for="totalDays">Total Days:</label>
+                <input type="number" id="totalDays" placeholder="e.g., 30">
+            </div>
+            
+            <div class="input-group">
+                <label for="daysPresent">Days Present:</label>
+                <input type="number" id="daysPresent" placeholder="e.g., 25">
+            </div>
+            
+            <button id="calculateBtn">Calculate Attendance</button>
+            
+            <div class="result" id="result">
+                Your attendance will appear here.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('calculateBtn').addEventListener('click', function() {
+            const totalDays = parseInt(document.getElementById('totalDays').value);
+            const daysPresent = parseInt(document.getElementById('daysPresent').value);
+            
+            if (isNaN(totalDays) || isNaN(daysPresent)) {
+                document.getElementById('result').textContent = "Please enter valid numbers!";
+                return;
+            }
+            
+            if (daysPresent > totalDays) {
+                document.getElementById('result').textContent = "Days present cannot exceed total days!";
+                return;
+            }
+            
+            const attendancePercentage = (daysPresent / totalDays) * 100;
+            const formattedPercentage = attendancePercentage.toFixed(2);
+            
+            // Check eligibility for semester exam
+            const isEligible = attendancePercentage >= 75;
+            const eligibilityMessage = isEligible 
+                ? "<span style='color: #a5ffa5;'>✅ Eligible for semester exam!</span>" 
+                : "<span style='color: #ffa5a5;'>❌ Not eligible for semester exam (min 75% required).</span>";
+            
+            // Calculate days needed to reach 75%
+            let daysNeededMessage = "";
+            if (attendancePercentage < 75) {
+                const daysNeeded = Math.ceil((0.75 * totalDays) - daysPresent);
+                daysNeededMessage = `<br><strong>Hours needed to reach 75%:</strong> ${daysNeeded} more Hour(S)`;
+            }
+            
+            document.getElementById('result').innerHTML = `
+                <strong>Attendance Percentage:</strong> ${formattedPercentage}% <br>
+                <strong>Days Absent:</strong> ${totalDays - daysPresent} <br>
+                ${eligibilityMessage}
+                ${daysNeededMessage}
+            `;
+        });
+    </script>
+</body>
+</html>
